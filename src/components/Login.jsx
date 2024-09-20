@@ -14,7 +14,7 @@ const Login = () => {
             }
     async function handleSubmit(e){
         e.preventDefault()
-       fetch('http://localhost:8080/login',{
+       fetch('https://sheskill-latest.onrender.com/login',{
            method:'POST',
            headers:{
                'Content-Type':'application/json'

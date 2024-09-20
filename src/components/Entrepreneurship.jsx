@@ -16,7 +16,7 @@ function Entrepreneurship() {
 
 const fetchIdeas= async () => {
         try {
-            const response = await fetch('http://localhost:8080/idea/allIdeas', {
+            const response = await fetch('https://sheskill-latest.onrender.com/idea/allIdeas', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ useEffect(()=>{
 
 const fetchIdeas= async () => {
         try {
-            const response = await fetch('http://localhost:8080/idea/allIdeas', {
+            const response = await fetch('https://sheskill-latest.onrender.com/idea/allIdeas', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const fetchIdeas= async () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/idea/add', {
+      const response = await fetch('https://sheskill-latest.onrender.com/idea/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

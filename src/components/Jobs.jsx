@@ -27,7 +27,7 @@ if (!isLoggedIn) {
 
     const fetchJobs = async () => {
         try {
-            const response = await fetch('http://localhost:8080/job/allJobs', {
+            const response = await fetch('https://sheskill-latest.onrender.com/job/allJobs', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ if (!isLoggedIn) {
 
     const getStatus = async (jobId) => {
         try {
-            const response = await fetch(`http://localhost:8080/application/getStatus?jobId=${jobId}`, {
+            const response = await fetch(`https://sheskill-latest.onrender.com/application/getStatus?jobId=${jobId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ if (!isLoggedIn) {
     const applied=false;
 
             try {
-                const response = await fetch('http://localhost:8080/application/add', {
+                const response = await fetch('https://sheskill-latest.onrender.com/application/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
