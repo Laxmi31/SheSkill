@@ -116,7 +116,7 @@ if (!isLoggedIn) {
                 {jobs.map((job) => (
                     <div key={job.jobId} className="job-item">
                         <div className="job-image-container">
-                            <img src='images/img_1.png' alt={`${job.companyName} logo`} />
+                            <img src="images/img_1.png" alt={`${job.companyName} logo`} />
                         </div>
                         <div className="job-info">
                             <h2>{job.title}</h2>
