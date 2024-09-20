@@ -1,7 +1,7 @@
 .jobs-container {
  
-    padding: 40px 20px;
-    background-color: #fbfbfb;
+    padding: 100px 20px;
+    background: linear-gradient(to right, #add8e6, #ffb6c1);
     text-align: center;
     font-family: 'Arial', sans-serif;
 }

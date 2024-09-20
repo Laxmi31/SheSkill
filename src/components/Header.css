@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 80px 0;
+    padding: 80px 10px;
 }
 .get-started-btn:hover {
     background-color: #0056b3;
@@ -17,14 +17,14 @@
     text-align: left;
 }
 .get-started-btn {
-    padding: 10px 20px;
+    padding: 5px 0px;
     border: none;
     border-radius: 4px;
-    background-color: #00c8ff;
+     background: linear-gradient(to left, #ff69b4, #1e90ff);
     color: white;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 .header-right {
     flex: 1;

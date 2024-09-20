@@ -1,30 +1,117 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from './services/AuthContext';
 import './Entrepreneurship.css';
 
 function Entrepreneurship() {
   const [ideas, setIdeas] = useState([]);
-  const [idea, setIdea] = useState('');
-  const [contact, setContact] = useState('');
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
-  const [file, setFile] = useState(null); // New state for file upload
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { isLoggedIn, user } = useContext(AuthContext);
+  const token = localStorage.getItem('token');
 
-  const addIdea = (e) => {
+const fetchIdeas= async () => {
+        try {
+            const response = await fetch('http://localhost:8080/idea/allIdeas', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch jobs');
+            }
+
+            const data = await response.json();
+            setIdeas(data);
+
+
+        } catch (error) {
+            console('Failed to fetch jobs');
+        }
+    };
+
+
+useEffect(()=>{
+
+const fetchIdeas= async () => {
+        try {
+            const response = await fetch('http://localhost:8080/idea/allIdeas', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch jobs');
+            }
+
+            const data = await response.json();
+            setIdeas(data);
+
+
+        } catch (error) {
+            console('Failed to fetch jobs');
+        }
+    };
+
+
+
+
+    fetchIdeas()
+
+    },[])
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  const addIdea = async (e) => {
     e.preventDefault();
-    if (idea && contact && (link || file)) {
-      const fileURL = file ? URL.createObjectURL(file) : null;
-      setIdeas([...ideas, { idea, contact, link, file: fileURL, contributions: [] }]);
-      setIdea('');
-      setContact('');
-      setLink('');
-      setFile(null); // Reset file input
-    }
-  };
 
-  const addContribution = (index, contribution) => {
-    const newIdeas = ideas.map((ideaItem, i) =>
-      i === index ? { ...ideaItem, contributions: [...ideaItem.contributions, contribution] } : ideaItem
-    );
-    setIdeas(newIdeas);
+    try {
+      const response = await fetch('http://localhost:8080/idea/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Ensure the token is valid
+        },
+        body: JSON.stringify({
+          title,
+          type,
+          description,
+          link,
+         // Automatically setting posted_by from logged-in user
+        }),
+      });
+
+      if (response.ok) {
+        setSuccessMessage('Idea submitted successfully!');
+        setErrorMessage('');
+        setTitle('');
+        setType('');
+        setDescription('');
+        setLink('');
+        await fetchIdeas();
+
+      } else if (response.status === 401) {
+        setErrorMessage('Unauthorized access. Please log in again.');
+        setSuccessMessage('');
+      } else {
+        setErrorMessage('There was a problem with the submission.');
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      setErrorMessage('Submission error: ' + error.message);
+      setSuccessMessage('');
+    }
   };
 
   return (
@@ -35,16 +122,22 @@ function Entrepreneurship() {
       <div className="entrepreneurship-container">
         <form className="idea-form" onSubmit={addIdea}>
           <h2>Share Your Innovative Idea</h2>
-          <textarea
-            placeholder="Describe your idea..."
-            value={idea}
-            onChange={(e) => setIdea(e.target.value)}
+          <input
+            type="text"
+            placeholder="Title of your idea"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Your contact details"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
+            placeholder="Type of your idea"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          />
+          <textarea
+            placeholder="Describe your idea..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
           <input
             type="text"
@@ -52,44 +145,22 @@ function Entrepreneurship() {
             value={link}
             onChange={(e) => setLink(e.target.value)}
           />
-          <input
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])} // Capture file input
-          />
+
           <button type="submit">Submit Idea</button>
+          {successMessage && <p className="success-message">{successMessage}</p>}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </form>
 
         <div className="idea-list">
-          <h2>Innovative Ideas</h2>
-          {ideas.map((ideaItem, index) => (
+          <h3>Submitted Ideas</h3>
+          {ideas.map((idea, index) => (
             <div key={index} className="idea-item">
-              <p>{ideaItem.idea}</p>
-              <p>Contact: {ideaItem.contact}</p>
-              {ideaItem.link && (
-                <p>
-                  Link: <a href={ideaItem.link} target="_blank" rel="noopener noreferrer">{ideaItem.link}</a>
-                </p>
-              )}
-              {ideaItem.file && (
-                <p>
-                  Uploaded File: <a href={ideaItem.file} target="_blank" rel="noopener noreferrer">View File</a>
-                </p>
-              )}
-              <h4>Contributions:</h4>
-              <ul>
-                {ideaItem.contributions.map((contribution, idx) => (
-                  <li key={idx}>{contribution}</li>
-                ))}
-              </ul>
-              <textarea
-                placeholder="Add your contribution..."
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && e.target.value.trim() !== '') {
-                    addContribution(index, e.target.value.trim());
-                    e.target.value = '';
-                  }
-                }}
-              />
+              <h4>{idea.title}</h4>
+              <p>Type: {idea.type}</p>
+              <p>{idea.description}</p>
+              <a href={idea.link} target="_blank" rel="noopener noreferrer">
+                {idea.link}
+              </a>
             </div>
           ))}
         </div>

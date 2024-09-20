@@ -14,8 +14,8 @@
 .container {
     width: 100%;
     min-height: 100vh;
-    background-color: whitesmoke;
+  background: linear-gradient(to right, #add8e6, #ffb6c1); /* Light Blue to Light Pink */
     background-size: cover;
     background-position: center;
-    padding: 10px 10%;
+    padding: 0px;
 }

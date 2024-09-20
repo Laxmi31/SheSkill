@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from './services/AuthContext';
 import './Network.css'; // Import the CSS file for styling
 
 const profiles = [
@@ -9,6 +11,12 @@ const profiles = [
 ];
 
 const NetworkPage = () => {
+     const { isLoggedIn, user } = useContext(AuthContext);
+
+        if (!isLoggedIn) {
+              return <Navigate to="/login" />;
+            }
+
     return (
         <div className="network-page">
             <h1>Network</h1>
@@ -28,5 +36,6 @@ const NetworkPage = () => {
         </div>
     );
 }
+
 
 export default NetworkPage;

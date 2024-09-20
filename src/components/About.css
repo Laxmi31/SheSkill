@@ -1,8 +1,8 @@
 .about-container {
-    padding: 40px;
+    padding: 60px;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0dc7e8, #fb17ff);
-    color: white;
+     background: linear-gradient(to right, #add8e6, #ffb6c1);
+    color: black;
     min-height: 100vh;
 }
 
@@ -14,7 +14,7 @@
 .about-header h1 {
     font-size: 3rem;
     margin-bottom: 10px;
-    color: #fff;
+    color: grey;
 }
 
 .about-header p {
@@ -47,7 +47,7 @@
 .about-text h2 {
     font-size: 2rem;
     margin-bottom: 10px;
-    color: #fff;
+    color: grey;
 }
 
 .about-text p {
@@ -62,19 +62,19 @@
 .about-footer h2 {
     font-size: 2rem;
     margin-bottom: 10px;
-    color: #fff;
+    color: grey;
 }
 
 .about-footer p {
     font-size: 1rem;
     margin-bottom: 20px;
-    color: #f0f0f0;
+    color: grey;
 }
 
 .contact-email {
     display: inline-block;
     font-size: 1.2rem;
-    color: #fff;
+    color: grey;
     text-decoration: none;
     margin-bottom: 20px;
     padding: 10px 20px;
@@ -88,16 +88,4 @@
     color: #f730e3;
 }
 
-.contact-button {
-    padding: 10px 20px;
-    background-color: #3f9cee;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.contact-button:hover {
-    background-color: #1e7bf5;
-}

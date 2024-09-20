@@ -41,16 +41,22 @@ const Footer = () => {
                     </ul>
                 </div>
             </div>
-            <div className="footer-bottom">
-                <span className="footer-bottom-text">© 2023 <a href="#" className="footer-bottom-link">Your Company</a>. All Rights Reserved.</span>
-                <div className="footer-social">
-                    <a href="#" className="footer-social-link" aria-label="Facebook">F</a>
-                    <a href="#" className="footer-social-link" aria-label="Discord">D</a>
-                    <a href="#" className="footer-social-link" aria-label="Twitter">T</a>
-                    <a href="#" className="footer-social-link" aria-label="GitHub">G</a>
-                    <a href="#" className="footer-social-link" aria-label="Dribbble">D</a>
-                </div>
-            </div>
+           <div className="footer-bottom">
+               <span className="footer-bottom-text">© 2023 <a href="#" className="footer-bottom-link">Your Company</a>. All Rights Reserved.</span>
+               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+               <div className="footer-social">
+                   <a href="https://www.facebook.com" className="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                               <i className="fab fa-facebook-f"></i>
+                           </a>
+                           <a href="https://discord.com" className="footer-social-link" aria-label="Discord" target="_blank" rel="noopener noreferrer">
+                               <i className="fab fa-discord"></i>
+                           </a>
+                           <a href="https://twitter.com" className="footer-social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+                               <i className="fab fa-twitter"></i>
+                           </a>
+               </div>
+           </div>
         </footer>
     );
 };

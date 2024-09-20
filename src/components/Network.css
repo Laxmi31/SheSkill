@@ -1,8 +1,14 @@
 .network-page {
     padding: 20px;
-    background-color: #f5f5f5;
+    background: linear-gradient(to right, #add8e6, #ffb6c1);
     text-align: center;
+    min-height: 100vh; /* Ensures it fills the full height of the viewport */
+    display: flex;
+    flex-direction: column;
+    //justify-content: center; /* Vertically center content */
+    align-items: center; /* Horizontally center content */
 }
+
 
 h1 {
     font-size: 2rem;

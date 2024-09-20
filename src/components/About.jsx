@@ -28,8 +28,8 @@ const About = () => {
             <div className="about-footer">
                 <h2>Get in Touch</h2>
                 <p>If you have any questions or need support, feel free to reach out to us.</p>
-                <a href="mailto:jebo22mca@cmrit.ac.in" className="contact-email">jebo22mca@cmrit.ac.in</a>
-                <button className="contact-button">Contact Us</button>
+                <a href="mailto:jebo22mca@cmrit.ac.in" className="contact-email">Contact Us: sheskilljobportal@gmail.com</a><br/>
+
             </div>
         </div>
     );

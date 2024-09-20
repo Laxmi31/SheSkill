@@ -1,69 +1,133 @@
-import React, { useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from './services/AuthContext';
 import './Jobs.css';
-import { Link,Navigate } from 'react-router-dom';
-import {AuthContext} from './services/AuthContext';
-
-const jobsData = [
-    { id: 1, title: 'Frontend Developer', company: 'TechCorp', image: 'images/job1.png' },
-    { id: 3, title: 'UI/UX Designer', company: 'DesignStudio', image: 'images/job3.jpg' },
-    { id: 4, title: 'Project Manager', company: 'DataMinds', image: 'images/job4.png' },
-    { id: 5, title: 'Data Scientist', company: 'TechWave', image: 'images/company6.jpg' },
-    { id: 6, title: 'Mobile Developer', company: 'Appify', image: 'images/job6.png' },
-    { id: 7, title: 'DevOps Engineer', company: 'CloudSync', image: 'images/job7.png' },
-    { id: 8, title: 'QA Engineer', company: 'QualityPlus', image: 'images/job8.jpg' },
-    { id: 9, title: 'Content Writer', company: 'Google', image: 'images/company5.png' },
-    { id: 10, title: 'Cybersecurity Analyst', company: 'Intel', image: 'images/company3.png' }
-];
 
 const Jobs = () => {
-    const [jobs,setJobs]=useState('');
-    const [error,setError]=useState('');
-
+    const [jobs, setJobs] = useState([]);
+    const [jobStatuses, setJobStatuses] = useState({}); // Store statuses for each job
+    const [error, setError] = useState('');
+    const [redirect, setRedirect] = useState(null); // State for redirection
     const { isLoggedIn } = useContext(AuthContext);
+    const token = localStorage.getItem('token');
+    const [applied,setApplied]=useState(0);
 
-        // if (!isLoggedIn) {
-        //     return <Navigate to="/login" />;
-        // }
+
+
     useEffect(() => {
-            const token = localStorage.getItem('token');
+        if (token) {
+            fetchJobs();
+        } else {
+            setError('No token found, please log in first.');
+        }
+    }, [token,applied]);
+if (!isLoggedIn) {
+            return <Navigate to="/login" />;
+          }
 
-            if (token) {
-                fetch('http://localhost:8080/job/allJobs', {
-                    method: 'GET',
+    const fetchJobs = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/job/allJobs', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch jobs');
+            }
+
+            const data = await response.json();
+            setJobs(data);
+
+            // Fetch job statuses for each job
+            data.forEach(job => getStatus(job.jobId));
+        } catch (error) {
+            setError('Failed to fetch jobs');
+        }
+    };
+
+    const getStatus = async (jobId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/application/getStatus?jobId=${jobId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch job status');
+            }
+
+            const data = await response.json();
+            setJobStatuses(prevStatuses => ({
+                ...prevStatuses,
+                [jobId]: data // Store the boolean status for each job
+            }));
+        } catch (error) {
+            console.error('Error fetching status:', error);
+        }
+    };
+
+    const handleApply = async (jobId) => {
+    const applied=false;
+
+            try {
+                const response = await fetch('http://localhost:8080/application/add', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to fetch jobs');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        setJobs(data);
-                    })
-                    .catch(error => {
+                    },
+                    body: JSON.stringify({ jobId, status: "applied" })
+                });
 
-                    });
-            } else {
-                setError('No token found, please log in first.');
-         }
-    },[]);
+                if (!response.ok) {
+                    throw new Error('Failed to apply');
+                }
+
+                const data = await response.json();
+                applied=true;
+                alert("Applied successfully");
+                setApplied(applied+1);
+                // Update the local state immediately
+                setJobStatuses(prevStatuses => ({
+                    ...prevStatuses,
+                    [jobId]: true // Assume applied is true after successful application
+                }));
+            } catch (error) {
+                setError('Failed to apply for the job');
+            }
+                setApplied(applied+1);
+    };
+
+    if (redirect) {
+        return <Navigate to={redirect} />;
+    }
+
     return (
         <div className="jobs-container">
             <h1>Exciting Job Opportunities</h1>
             <div className="jobs-list">
-                {jobsData.map((job) => (
-                    <div key={job.id} className="job-item">
+                {jobs.map((job) => (
+                    <div key={job.jobId} className="job-item">
                         <div className="job-image-container">
-                            <img src={job.image} alt={`${job.company} logo`} />
+                            <img src={job.image} alt={`${job.companyName} logo`} />
                         </div>
                         <div className="job-info">
                             <h2>{job.title}</h2>
-                            <p>{job.company}</p>
-                            <button>Apply Now</button>
+                            <p>{job.companyName}</p>
+                            {
+                                jobStatuses[job.jobId] ? (
+                                    <button onClick={() => alert("Already applied")}>Applied</button>
+                                ) : (
+                                    <button onClick={() => handleApply(job.jobId)}>Apply Now</button>
+                                )
+                            }
                         </div>
                     </div>
                 ))}
